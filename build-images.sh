@@ -11,9 +11,9 @@ set -e
 # Prepare variables for later use
 images=()
 # The image will be pushed to GitHub container registry
-repobase="${REPOBASE:-ghcr.io/nethserver}"
+repobase="${REPOBASE:-ghcr.io/phillopp}"
 # Configure the image name
-reponame="kickstart"
+reponame="sonarqube"
 
 # Create a new empty container image
 container=$(buildah from scratch)
@@ -42,10 +42,10 @@ buildah add "${container}" ui/dist /ui
 # rootfull=0 === rootless container
 # tcp-ports-demand=1 number of tcp Port to reserve , 1 is the minimum, can be udp or tcp
 buildah config --entrypoint=/ \
-    --label="org.nethserver.authorizations=traefik@node:routeadm" \
+    --label="org.nethserver.authorizations=traefik@node:routeadm cluster:accountconsumer" \
     --label="org.nethserver.tcp-ports-demand=1" \
     --label="org.nethserver.rootfull=0" \
-    --label="org.nethserver.images=docker.io/postgres:15.5-alpine3.19 docker.io/nginx:stable-alpine3.17" \
+    --label="org.nethserver.images=docker.io/postgres:15.5-alpine3.19 docker.io/sonarqube:9.9.6-community" \
     "${container}"
 # Commit the image
 buildah commit "${container}" "${repobase}/${reponame}"
