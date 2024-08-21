@@ -61,6 +61,21 @@
                 $t("settings.enabled")
               }}</template>
             </cv-toggle>
+            <NsComboBox
+              v-model.trim="ldapDomain"
+              :autoFilter="true"
+              :autoHighlight="true"
+              :title="$t('settings.ldap_domain')"
+              :label="$t('settings.choose_ldap_domain')"
+              :options="ldapDomainList"
+              :acceptUserInput="false"
+              :showItemType="true"
+              :invalid-message="$t(error.ldap_domain)"
+              :disabled="loading.getConfiguration || loading.configureModule"
+              tooltipAlignment="start"
+              tooltipDirection="top"
+              ref="ldapDomain"
+            ></NsComboBox>
               <!-- advanced options -->
             <cv-accordion ref="accordion" class="maxwidth mg-bottom">
               <cv-accordion-item :open="toggleAccordion[0]">
@@ -125,6 +140,8 @@ export default {
       host: "",
       isLetsEncryptEnabled: false,
       isHttpToHttpsEnabled: true,
+      ldapDomainList: [],
+      ldapDomain: "",
       loading: {
         getConfiguration: false,
         configureModule: false,
@@ -135,6 +152,7 @@ export default {
         host: "",
         lets_encrypt: "",
         http2https: "",
+        ldapDomain: "",
       },
     };
   },
@@ -202,6 +220,7 @@ export default {
       this.host = config.host;
       this.isLetsEncryptEnabled = config.lets_encrypt;
       this.isHttpToHttpsEnabled = config.http2https;
+      this.ldapDomain = config.ldapDomain;
 
       this.loading.getConfiguration = false;
       this.focusElement("host");
@@ -271,6 +290,7 @@ export default {
             host: this.host,
             lets_encrypt: this.isLetsEncryptEnabled,
             http2https: this.isHttpToHttpsEnabled,
+            ldap_domain: this.ldapDomain
           },
           extra: {
             title: this.$t("settings.instance_configuration", {

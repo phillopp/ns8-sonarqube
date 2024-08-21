@@ -32,6 +32,11 @@
             "type": "boolean",
             "title": "HTTP to HTTPS redirection",
             "description": "Redirect all the HTTP requests to HTTPS"
+        },
+        "ldap_domain": {
+            "type": "string",
+            "title": "LDAP-domain",
+            "description": "LDAP"
         }
     }
 }
