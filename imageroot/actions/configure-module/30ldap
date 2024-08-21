@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+
+#
+# Copyright (C) 2024 Philip Falliano
+#
+
+import json
+import sys
+import agent
+import agent.tasks
+from agent.ldapproxy import Ldapproxy
+
+# Try to parse the stdin as JSON.
+# If parsing fails, output everything to stderr
+data = json.load(sys.stdin)
+
+# Setup default values
+ldap_domain = data.get("ldap_domain")
+
+if ldap_domain:
+    # Bind to Domain
+    agent.bind_user_domains([cdomain])
+
+    try:
+        ldap = Ldapproxy().get_domain(ldap_domain)
+        'host' in ldap
+    except:
+        sys.exit(2)
+
+    if ldap['schema'] == 'ad':
+        userNameAttribute = 'sAMAccountName'
+        groupAttribute = 'group'
+        groupUserAttribute = 'member'
+    else:
+        userNameAttribute = 'uid'
+        groupAttribute = 'groupOfUniqueNames'
+        groupUserAttribute = 'uniqueMember'
+
+    file_name = 'sonar.properties'
+    f = open(file_name, 'a+')  # open file in write mode
+    f.write('sonar.security.realm=LDAP')
+    f.write(f'ldap.url=ldap://10.0.2.2:{ldap['port']}')
+
+    # LDAP Credentials
+    f.write(f'ldap.bindDn={ldap['bind_dn']}')
+    f.write(f'ldap.bindPassword={ldap['bind_password']}')
+
+    # User Configuration
+    f.write(f'ldap.user.baseDn={ldap['base_dn']}')
+    f.write(f'ldap.user.request=(&(objectClass=person)({userNameAttribute}={{login}}))')
+    f.write(f'ldap.user.realNameAttribute=displayName')
+    f.write('ldap.user.emailAttribute=mail')
+
+    # Group Configuration
+    f.write(f'ldap.group.baseDn={ldap['base_dn']}')
+    f.write(f'(&(objectClass={groupAttribute})({groupUserAttribute}={{dn}}))')
+
+    f.close()

@@ -23,6 +23,7 @@ ExecStartPre=/usr/bin/podman pod create --infra-conmon-pidfile %t/sonarqube.pid 
     --pod-id-file %t/sonarqube.pod-id \
     --name sonarqube \
     --publish 127.0.0.1:${TCP_PORT}:9000 \
+    --add-host=accountprovider:10.0.2.2 \
     --replace
 ExecStart=/usr/bin/podman pod start --pod-id-file %t/sonarqube.pod-id
 ExecStop=/usr/bin/podman pod stop --ignore --pod-id-file %t/sonarqube.pod-id -t 10

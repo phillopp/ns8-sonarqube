@@ -7,14 +7,17 @@
         {
             "host": "sonarqube.domain.org",
             "http2https": true,
-            "lets_encrypt": true
+            "lets_encrypt": true,
+            "ldap_domain_list": ["ldap.example.com"],
+            "ldap_domain": "ldap.example.com"
         }
     ],
     "type": "object",
     "required": [
         "host",
         "http2https",
-        "lets_encrypt"
+        "lets_encrypt",
+        "ldap_domain_list"
     ],
     "properties": {
         "host": {
@@ -31,6 +34,17 @@
             "type": "boolean",
             "title": "HTTP to HTTPS redirection",
             "description": "Redirect all the HTTP requests to HTTPS"
+        },
+        "ldap_domain_list": {
+            "type": "array",
+            "title": "LDAP Domain List",
+            "description": "All LDAP Domains on server"
+        },
+        "ldap_domain": {
+            "type": "string",
+            "title": "Selected LDAP Domain",
+            "description": "Selected LDAP-Domain",
+            "format": "idn-hostname"
         }
     }
 }
