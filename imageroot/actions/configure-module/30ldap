@@ -39,20 +39,20 @@ if ldap_domain:
     file_name = 'sonar.properties'
     f = open(file_name, 'a+')  # open file in write mode
     f.write('sonar.security.realm=LDAP')
-    f.write(f'ldap.url=ldap://10.0.2.2:{ldap['port']}')
+    f.write('ldap.url=ldap://10.0.2.2:{}'.format(ldap['port']))
 
     # LDAP Credentials
-    f.write(f'ldap.bindDn={ldap['bind_dn']}')
-    f.write(f'ldap.bindPassword={ldap['bind_password']}')
+    f.write('ldap.bindDn={}'.format(ldap['bind_dn']))
+    f.write('ldap.bindPassword={}'.format(ldap['bind_password']))
 
     # User Configuration
-    f.write(f'ldap.user.baseDn={ldap['base_dn']}')
-    f.write(f'ldap.user.request=(&(objectClass=person)({userNameAttribute}={{login}}))')
-    f.write(f'ldap.user.realNameAttribute=displayName')
+    f.write('ldap.user.baseDn={}'.format(ldap['base_dn']))
+    f.write('ldap.user.request=(&(objectClass=person)({}={{login}}))'.format(userNameAttribute))
+    f.write('ldap.user.realNameAttribute=displayName')
     f.write('ldap.user.emailAttribute=mail')
 
     # Group Configuration
-    f.write(f'ldap.group.baseDn={ldap['base_dn']}')
-    f.write(f'(&(objectClass={groupAttribute})({groupUserAttribute}={{dn}}))')
+    f.write('ldap.group.baseDn={}'.format(ldap['base_dn']))
+    f.write('(&(objectClass={})({}={{dn}}))'.format(groupAttribute, groupUserAttribute))
 
     f.close()
