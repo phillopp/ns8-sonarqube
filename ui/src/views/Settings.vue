@@ -139,7 +139,7 @@ export default {
       host: "",
       isLetsEncryptEnabled: false,
       isHttpToHttpsEnabled: true,
-      ldapDomainList: [],
+      ldapDomains: [],
       ldapDomain: "",
       loading: {
         getConfiguration: false,
@@ -279,7 +279,7 @@ export default {
           label: element["name"],
           value: element["name"],
         };
-        this.domains.push(option);
+        this.ldapDomains.push(option);
       });
       this.loading.listUserDomains = false;
     },
