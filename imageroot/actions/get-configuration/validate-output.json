@@ -35,7 +35,7 @@
             "description": "Redirect all the HTTP requests to HTTPS"
         },
         "ldap_domain": {
-            "type": "string",
+            "type": ["string", "null"],
             "title": "Selected LDAP Domain",
             "description": "Selected LDAP-Domain",
             "format": "idn-hostname"

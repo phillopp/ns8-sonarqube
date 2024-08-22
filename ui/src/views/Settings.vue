@@ -229,7 +229,7 @@ export default {
       this.host = config.host;
       this.isLetsEncryptEnabled = config.lets_encrypt;
       this.isHttpToHttpsEnabled = config.http2https;
-      this.ldapDomain = config.ldap_domain === "" ? "-" : config.ldap_domain;
+      this.ldapDomain = config.ldap_domain;
 
       this.loading.getConfiguration = false;
       this.focusElement("host");
@@ -280,12 +280,6 @@ export default {
           value: element["name"],
         };
         this.domains.push(option);
-      });
-      //PUSH no domain option
-      this.domains.unshift({
-        name: "no_user_domain",
-        label: this.$t("settings.no_user_domain"),
-        value: "-"
       });
       this.loading.listUserDomains = false;
     },
@@ -365,7 +359,7 @@ export default {
             host: this.host,
             lets_encrypt: this.isLetsEncryptEnabled,
             http2https: this.isHttpToHttpsEnabled,
-            ldap_domain: this.ldapDomain === "-" ? "" : this.ldapDomain,
+            ldap_domain: this.ldapDomain,
           },
           extra: {
             title: this.$t("settings.instance_configuration", {
