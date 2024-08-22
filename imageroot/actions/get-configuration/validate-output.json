@@ -16,8 +16,7 @@
     "required": [
         "host",
         "http2https",
-        "lets_encrypt",
-        "ldap_domain_list"
+        "lets_encrypt"
     ],
     "properties": {
         "host": {
@@ -34,11 +33,6 @@
             "type": "boolean",
             "title": "HTTP to HTTPS redirection",
             "description": "Redirect all the HTTP requests to HTTPS"
-        },
-        "ldap_domain_list": {
-            "type": "array",
-            "title": "LDAP Domain List",
-            "description": "All LDAP Domains on server"
         },
         "ldap_domain": {
             "type": "string",
