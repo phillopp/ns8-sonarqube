@@ -65,7 +65,7 @@
               v-model="ldapDomain"
               :options="ldapDomains"
               auto-highlight
-              :title="$t('settings.domain')"
+              :title="$t('settings.ldap_domain')"
               :invalid-message="$t(error.listUserDomains)"
               :disabled="loadingUi"
               :label="$t('settings.choose_ldap_domain')"
@@ -153,7 +153,7 @@ export default {
         lets_encrypt: "",
         http2https: "",
         ldapDomain: "",
-        listUserDomains: "",
+        ldapDomains: "",
       },
     };
   },
@@ -236,7 +236,7 @@ export default {
     },
     async listUserDomains() {
       this.loading.listUserDomains = true;
-      this.error.listUserDomains = "";
+      this.error.ldapDomains = "";
       const taskAction = "list-user-domains";
 
       // register to task error
@@ -265,7 +265,7 @@ export default {
       const err = res[0];
       if (err) {
         console.error(`error creating task ${taskAction}`, err);
-        this.error.listUserDomains = this.getErrorMessage(err);
+        this.error.ldapDomains = this.getErrorMessage(err);
         this.loading.listUserDomains = false;
         return;
       }
@@ -300,10 +300,10 @@ export default {
         }
         isValidationOk = false;
       }
-      if (!this.domain) {
+      if (!this.ldapDomain) {
         // test field cannot be empty
-        this.error.listUserDomains = this.$t("common.required");
-        this.focusElement("domain");
+        this.error.ldapDomains = this.$t("common.required");
+        this.focusElement("ldapDomain");
         isValidationOk = false;
       }
       return isValidationOk;
