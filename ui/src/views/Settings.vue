@@ -62,20 +62,19 @@
               }}</template>
             </cv-toggle>
             <NsComboBox
-              v-model.trim="ldapDomain"
-              :autoFilter="true"
-              :autoHighlight="true"
-              :title="$t('settings.ldap_domain')"
+              v-model="ldapDomain"
+              :options="ldapDomains"
+              auto-highlight
+              :title="$t('settings.domain')"
+              :invalid-message="$t(error.listUserDomains)"
+              :disabled="loadingUi"
               :label="$t('settings.choose_ldap_domain')"
-              :options="ldapDomainList"
-              :acceptUserInput="false"
-              :showItemType="true"
-              :invalid-message="$t(error.ldap_domain)"
-              :disabled="loading.getConfiguration || loading.configureModule"
+              light
               tooltipAlignment="start"
               tooltipDirection="top"
               ref="ldapDomain"
-            ></NsComboBox>
+            >
+            </NsComboBox>
               <!-- advanced options -->
             <cv-accordion ref="accordion" class="maxwidth mg-bottom">
               <cv-accordion-item :open="toggleAccordion[0]">
@@ -145,6 +144,7 @@ export default {
       loading: {
         getConfiguration: false,
         configureModule: false,
+        listUserDomains: true,
       },
       error: {
         getConfiguration: "",
@@ -153,14 +153,23 @@ export default {
         lets_encrypt: "",
         http2https: "",
         ldapDomain: "",
+        listUserDomains: "",
       },
     };
   },
   computed: {
     ...mapState(["instanceName", "core", "appName"]),
+    loadingUi() {
+      return (
+        this.loading.getConfiguration ||
+        this.loading.listUserDomains ||
+        this.loading.configureModule
+      );
+    },
   },
   created() {
     this.getConfiguration();
+    this.listUserDomains();
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {
@@ -220,10 +229,70 @@ export default {
       this.host = config.host;
       this.isLetsEncryptEnabled = config.lets_encrypt;
       this.isHttpToHttpsEnabled = config.http2https;
-      this.ldapDomain = config.ldapDomain;
+      this.ldapDomain = config.ldap_domain === "" ? "-" : config.ldap_domain;
 
       this.loading.getConfiguration = false;
       this.focusElement("host");
+    },
+    async listUserDomains() {
+      this.loading.listUserDomains = true;
+      this.error.listUserDomains = "";
+      const taskAction = "list-user-domains";
+
+      // register to task error
+      this.core.$root.$off(taskAction + "-aborted");
+      this.core.$root.$once(
+        taskAction + "-aborted",
+        this.listUserDomainsAborted
+      );
+
+      // register to task completion
+      this.core.$root.$off(taskAction + "-completed");
+      this.core.$root.$once(
+        taskAction + "-completed",
+        this.listUserDomainsCompleted
+      );
+
+      const res = await to(
+        this.createClusterTaskForApp({
+          action: taskAction,
+          extra: {
+            title: this.$t("action." + taskAction),
+            isNotificationHidden: true,
+          },
+        })
+      );
+      const err = res[0];
+      if (err) {
+        console.error(`error creating task ${taskAction}`, err);
+        this.error.listUserDomains = this.getErrorMessage(err);
+        this.loading.listUserDomains = false;
+        return;
+      }
+    },
+    listUserDomainsCompleted(taskContext, taskResult) {
+      const domains = taskResult.output;
+
+      domains["domains"].forEach((element) => {
+        const option = {
+          name: element["name"],
+          label: element["name"],
+          value: element["name"],
+        };
+        this.domains.push(option);
+      });
+      //PUSH no domain option
+      this.domains.unshift({
+        name: "no_user_domain",
+        label: this.$t("settings.no_user_domain"),
+        value: "-"
+      });
+      this.loading.listUserDomains = false;
+    },
+    listUserDomainsAborted(taskResult, taskContext) {
+      console.error(`${taskContext.action} aborted`, taskResult);
+      this.error.getConfiguration = this.core.$t("error.generic_error");
+      this.loading.listUserDomains = false;
     },
     validateConfigureModule() {
       this.clearErrors(this);
@@ -235,6 +304,12 @@ export default {
         if (isValidationOk) {
           this.focusElement("host");
         }
+        isValidationOk = false;
+      }
+      if (!this.domain) {
+        // test field cannot be empty
+        this.error.listUserDomains = this.$t("common.required");
+        this.focusElement("domain");
         isValidationOk = false;
       }
       return isValidationOk;
@@ -290,7 +365,7 @@ export default {
             host: this.host,
             lets_encrypt: this.isLetsEncryptEnabled,
             http2https: this.isHttpToHttpsEnabled,
-            ldap_domain: this.ldapDomain
+            ldap_domain: this.ldapDomain === "-" ? "" : this.ldapDomain,
           },
           extra: {
             title: this.$t("settings.instance_configuration", {

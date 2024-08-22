@@ -19,7 +19,8 @@ data = json.load(sys.stdin)
 
 # this values must exists in the json stdin
 # agent.set_env("MAIL_SERVER", data["mail_server"])
-# agent.set_env("LDAP_DOMAIN", data["ldap_domain"])
+agent.set_env("LDAP_DOMAIN", data["ldap_domain"])
+agent.set_env("HOST", data["host"])
 
 # you can add default values for the following variables
 # agent.set_env("MAIL_DOMAIN",data.get("mail_domain",""))

@@ -4,18 +4,14 @@
 # Copyright (C) 2024 Philip Falliano
 #
 
-import json
+import os
 import sys
 import agent
 import agent.tasks
 from agent.ldapproxy import Ldapproxy
 
-# Try to parse the stdin as JSON.
-# If parsing fails, output everything to stderr
-data = json.load(sys.stdin)
-
 # Setup default values
-ldap_domain = data.get("ldap_domain")
+ldap_domain = os.getenv("ldap_domain")
 
 if ldap_domain:
     # Bind to Domain
