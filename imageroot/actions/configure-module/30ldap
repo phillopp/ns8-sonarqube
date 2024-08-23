@@ -15,7 +15,7 @@ ldap_domain = os.getenv("ldap_domain")
 
 if ldap_domain:
     # Bind to Domain
-    agent.bind_user_domains([cdomain])
+    agent.bind_user_domains([ldap_domain])
 
     try:
         ldap = Ldapproxy().get_domain(ldap_domain)
@@ -32,23 +32,30 @@ if ldap_domain:
         groupAttribute = 'groupOfUniqueNames'
         groupUserAttribute = 'uniqueMember'
 
-    file_name = 'sonar.properties'
-    f = open(file_name, 'a+')  # open file in write mode
-    f.write('sonar.security.realm=LDAP')
-    f.write('ldap.url=ldap://10.0.2.2:{}'.format(ldap['port']))
+    file_path = 'sonar.properties'
 
-    # LDAP Credentials
-    f.write('ldap.bindDn={}'.format(ldap['bind_dn']))
-    f.write('ldap.bindPassword={}'.format(ldap['bind_password']))
+    tmpfile = ".{0}-{1!s}.tmp".format(os.path.basename(file_path), os.getpid())
 
-    # User Configuration
-    f.write('ldap.user.baseDn={}'.format(ldap['base_dn']))
-    f.write('ldap.user.request=(&(objectClass=person)({}={{login}}))'.format(userNameAttribute))
-    f.write('ldap.user.realNameAttribute=displayName')
-    f.write('ldap.user.emailAttribute=mail')
+    bdir = os.path.dirname(file_path) # Base directory
+    if bdir:
+        tmpfile = bdir + '/' + tmpfile # Prepend the base directory
 
-    # Group Configuration
-    f.write('ldap.group.baseDn={}'.format(ldap['base_dn']))
-    f.write('(&(objectClass={})({}={{dn}}))'.format(groupAttribute, groupUserAttribute))
+    with open(tmpfile, 'w') as f:
+        f.write('sonar.security.realm=LDAP')
+        f.write('ldap.url=ldap://10.0.2.2:{}'.format(ldap['port']))
 
-    f.close()
+        # LDAP Credentials
+        f.write('ldap.bindDn={}'.format(ldap['bind_dn']))
+        f.write('ldap.bindPassword={}'.format(ldap['bind_password']))
+
+        # User Configuration
+        f.write('ldap.user.baseDn={}'.format(ldap['base_dn']))
+        f.write('ldap.user.request=(&(objectClass=person)({}={{login}}))'.format(userNameAttribute))
+        f.write('ldap.user.realNameAttribute=displayName')
+        f.write('ldap.user.emailAttribute=mail')
+
+        # Group Configuration
+        f.write('ldap.group.baseDn={}'.format(ldap['base_dn']))
+        f.write('(&(objectClass={})({}={{dn}}))'.format(groupAttribute, groupUserAttribute))
+
+    os.rename(tmpfile, file_path)
