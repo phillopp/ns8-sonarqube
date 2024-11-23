@@ -23,7 +23,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/postgresql-app.pid \
     --volume postgres-data:/var/lib/postgresql/data:Z \
     --volume %S/state/restore/:/docker-entrypoint-initdb.d/:Z \
     --env POSTGRES_USER=postgres \
-    --env POSTGRES_PASSWORD=Nethesis,1234 \
+    --env POSTGRES_PASSWORD=sonarpw \
     --env POSTGRES_DB=sonarqube \
     --env TZ=UTC \
     ${POSTGRES_IMAGE}
