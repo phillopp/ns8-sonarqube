@@ -22,10 +22,10 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/postgresql-app.pid \
     --env-file=%S/state/environment \
     --volume postgres-data:/var/lib/postgresql/data:Z \
     --volume %S/state/restore/:/docker-entrypoint-initdb.d/:Z \
-    --env POSTGRES_USER=postgres \
-    --env POSTGRES_PASSWORD=Nethesis,1234 \
+    --env POSTGRES_USER=sonar \
+    --env POSTGRES_PASSWORD=sonar \
     --env POSTGRES_DB=sonarqube \
-    --env TZ=UTC \
+    --env TZ=Europe/Berlin \
     ${POSTGRES_IMAGE}
 ExecStartPost=/usr/bin/bash -c "while ! podman  exec postgresql-app psql -U postgres -d sonarqube ;  do sleep 5 ; done"
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/postgresql-app.ctr-id -t 10

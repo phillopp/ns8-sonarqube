@@ -45,7 +45,7 @@ buildah config --entrypoint=/ \
     --label="org.nethserver.authorizations=traefik@node:routeadm cluster:accountconsumer" \
     --label="org.nethserver.tcp-ports-demand=1" \
     --label="org.nethserver.rootfull=0" \
-    --label="org.nethserver.images=docker.io/postgres:15.5-alpine3.19 docker.io/sonarqube:9.9.6-community" \
+    --label="org.nethserver.images=docker.io/postgres:15.5-alpine3.19 docker.io/sonarqube:2025.1.1-developer" \
     "${container}"
 # Commit the image
 buildah commit "${container}" "${repobase}/${reponame}"

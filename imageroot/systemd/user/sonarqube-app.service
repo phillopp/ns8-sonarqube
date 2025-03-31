@@ -27,7 +27,7 @@ ExecStart=/usr/bin/podman run --conmon-pidfile %t/sonarqube-app.pid \
     --volume sonarqube_config:/opt/sonarqube/conf:Z \
     --volume %S/state/sonar.properties:/opt/sonarqube/conf/sonar.properties:ro,Z \
     --env=SONAR_* \
-    --env 'SONAR_JDBC_URL="jdbc:postgresql://postgres:Nethesis,1234@127.0.0.1:5432/sonarqube"' \
+    --env SONAR_JDBC_URL="jdbc:postgresql://sonar:sonar@127.0.0.1:5432/sonarqube" \
     ${SONARQUBE_IMAGE}
 ExecStop=/usr/bin/podman stop --ignore --cidfile %t/sonarqube-app.ctr-id -t 10
 ExecReload=/usr/bin/podman kill -s HUP sonarqube-app
@@ -35,6 +35,8 @@ SyslogIdentifier=%u
 ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/sonarqube-app.ctr-id
 PIDFile=%t/sonarqube-app.pid
 Type=forking
+LimitNOFILE=131072
+LimitNPROC=8192
 
 [Install]
 WantedBy=default.target
