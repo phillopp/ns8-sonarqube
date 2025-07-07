@@ -3141,9 +3141,9 @@ core-js-compat@^3.40.0, core-js-compat@^3.6.5:
     browserslist "^4.25.0"
 
 core-js@^3.15.2, core-js@^3.6.5:
-  version "3.15.2"
-  resolved "https://registry.npmmirror.com/core-js/download/core-js-3.15.2.tgz?cache=0&sync_timestamp=1624966050136&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fcore-js%2Fdownload%2Fcore-js-3.15.2.tgz"
-  integrity sha1-dAZg0v9V7zTOZk1+JFURnFvdPWE=
+  version "3.44.0"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.44.0.tgz#db4fd4fa07933c1d6898c8b112a1119a9336e959"
+  integrity sha512-aFCtd4l6GvAXwVEh3XbbVqJGHDJt0OZRa+5ePGx3LLwi12WfexqQxcsohb2wgsa/92xtl19Hd66G/L+TaAxDMw==
 
 core-util-is@1.0.2:
   version "1.0.2"
