@@ -1045,10 +1045,10 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@nethserver/ns8-ui-lib@^0.1.32":
-  version "0.1.32"
-  resolved "https://registry.npmmirror.com/@nethserver/ns8-ui-lib/-/ns8-ui-lib-0.1.32.tgz#7556dd5c7f96ff166597552c9b20e02599d86ba6"
-  integrity sha512-CqW+Qr65uFiKYe/cG0qahRD+3ojXhDxMJ8Mf8M9CXDHY0WSWygyGYAftLxF8rtQkOdGHlaYv7cSK7TctHggHGA==
+"@nethserver/ns8-ui-lib@^1.0.0":
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/@nethserver/ns8-ui-lib/-/ns8-ui-lib-1.12.1.tgz#fe4dc6487c79c20ccf8ba3c7dc439337197a3a61"
+  integrity sha512-WkAtcBpRS6BbUIiT0T0BafWmeaa9uxkDHUZu14wCcF/MLU34GJlGjo3cTdw3BtK2deqZ9iIXZQVtXSFWEnK01g==
   dependencies:
     "@rollup/plugin-json" "^4.1.0"
     core-js "^3.15.2"
