@@ -13139,9 +13139,9 @@ __metadata:
   linkType: hard
 
 "vue-router@npm:^3.2.0":
-  version: 3.5.2
-  resolution: "vue-router@npm:3.5.2"
-  checksum: 10c0/7340eb72104d502dfd6b108aac9858c7a2bbc9ffaa13bc3ad5526c540050972c9565573685291fc9df79ffc7b0b7eb8a9a6187936b0957041622b14f0c936d73
+  version: 3.6.5
+  resolution: "vue-router@npm:3.6.5"
+  checksum: 10c0/f1c81854a7bb943fe78ad1516acc948fffbf71646ee4d568c52c0c680dd4763152d1c317ac240a5066bc24682700b4698bd135d54c2fc7d8cb21d068a99e50ac
   languageName: node
   linkType: hard
 
