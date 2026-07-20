@@ -1,6 +1,13 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
+  "extends": ["local>NethServer/.github:ns8-automerge"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/build-images.sh/"],
+      "matchStrings": ["docker\\.io/sonarqube:(?<currentValue>[-0-9\\.a-z]+)"],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "sonarqube"
+    }
   ]
 }
